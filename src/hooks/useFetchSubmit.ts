@@ -3,6 +3,7 @@ import { useState } from "react";
 const useFetchSubmit = (endpoint: string, method: string) => {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchData = async (body?: any) => {
@@ -19,6 +20,7 @@ const useFetchSubmit = (endpoint: string, method: string) => {
         body: body,
       });
       setData(await response.json());
+      setIsSuccess(true);
       setIsLoading(false);
     } catch (error: any) {
       setError(error);
@@ -32,7 +34,7 @@ const useFetchSubmit = (endpoint: string, method: string) => {
     await fetchData(body);
   };
 
-  return { data, isLoading, error, request };
+  return { data, isLoading, isSuccess, error, request };
 };
 
 export default useFetchSubmit;

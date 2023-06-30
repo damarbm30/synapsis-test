@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const useFetch = (endpoint: string) => {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchData = async () => {
@@ -19,6 +20,7 @@ const useFetch = (endpoint: string) => {
       });
       setData(await response.json());
       setIsLoading(false);
+      setIsSuccess(true);
     } catch (error: any) {
       setError(error);
       console.error(error.message);
@@ -35,7 +37,7 @@ const useFetch = (endpoint: string) => {
     fetchData();
   };
 
-  return { data, isLoading, error, refetch };
+  return { data, isLoading, isSuccess, error, refetch };
 };
 
 export default useFetch;

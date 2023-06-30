@@ -1,21 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, FormEvent } from "react";
+import { useRef, FormEvent, useEffect } from "react";
 
 import useFetchSubmit from "~/hooks/useFetchSubmit";
 
 const Register = () => {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const { isLoading, request: registerUser } = useFetchSubmit("/users", "POST");
+  const { isSuccess, request: registerUser } = useFetchSubmit("/users", "POST");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(formRef.current!);
     registerUser(JSON.stringify(Object.fromEntries(formData)));
-    if (!isLoading) router.push("/users");
   };
+
+  useEffect(() => {
+    if (isSuccess) router.push("/users");
+  }, [isSuccess]);
 
   return (
     <section className="container mx-auto my-4 min-h-full">

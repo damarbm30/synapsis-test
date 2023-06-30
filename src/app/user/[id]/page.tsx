@@ -16,10 +16,10 @@ const UserProfile = () => {
   const { data: userApi, isLoading: isUserLoading } = useFetch(`/users/${id}`);
   const {
     data: modifiedUser,
-    isLoading: isModifyUserLoading,
+    isLoading: isModifyUserSuccess,
     request: editUser,
   } = useFetchSubmit(`/users/${id}`, "PUT");
-  const { isLoading: isDeleteUserLoading, request: deleteUser } = useFetchSubmit(`/users/${id}`, "DELETE");
+  const { isSuccess: isDeleteSuccess, request: deleteUser } = useFetchSubmit(`/users/${id}`, "DELETE");
   const [user, setUser] = useState<User>(Object);
   const router = useRouter();
 
@@ -34,13 +34,16 @@ const UserProfile = () => {
 
   const handleDeleteUser = () => {
     deleteUser();
-    if (!isDeleteUserLoading) router.push("/users");
   };
+
+  useEffect(() => {
+    if (isDeleteSuccess) router.push("/users");
+  }, [isDeleteSuccess]);
 
   useEffect(() => {
     if (Object.keys(modifiedUser).length === 0) setUser(userApi);
     else setUser(modifiedUser);
-  }, [isModifyUserLoading, isUserLoading]);
+  }, [isModifyUserSuccess, isUserLoading]);
 
   return (
     <section className="container mx-auto">
