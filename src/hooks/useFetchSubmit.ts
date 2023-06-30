@@ -19,7 +19,9 @@ const useFetchSubmit = (endpoint: string, method: string) => {
         },
         body: body,
       });
-      setData(await response.json());
+      // PREVENT UNEXPECTED END OF JSON INPUT
+      // IF BODY IS EMPTY
+      if (body) setData(await response?.json());
       setIsSuccess(true);
       setIsLoading(false);
     } catch (error: any) {
